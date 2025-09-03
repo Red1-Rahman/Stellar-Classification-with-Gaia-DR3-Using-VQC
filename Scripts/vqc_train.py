@@ -12,13 +12,20 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
 import pennylane as qml
 from pennylane import numpy as npqml
+import numpy as np
+
+# Path setup for cross-platform compatibility
+PROJ_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DATA_DIR = os.path.join(PROJ_ROOT, "Datasets", "Processed")
+RESULTS_DIR = os.path.join(PROJ_ROOT, "Results")
+LOGS_DIR = os.path.join(PROJ_ROOT, "logs")
 
 # -------------------------------
 # 1. Setup Logging
 # -------------------------------
-os.makedirs("../logs", exist_ok=True)
+os.makedirs(LOGS_DIR, exist_ok=True)
 logging.basicConfig(
-    filename="../logs/vqc_train.log",
+    filename=os.path.join(LOGS_DIR, "vqc_train.log"),
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
@@ -27,7 +34,7 @@ logging.info("Starting VQC training script")
 # -------------------------------
 # 2. Load Processed Dataset
 # -------------------------------
-processed_csv = "../Datasets/Processed/gaia_features_20.csv"
+processed_csv = os.path.join(DATA_DIR, "gaia_features_20.csv")
 if not os.path.exists(processed_csv):
     logging.error(f"{processed_csv} not found. Run gaia_feature_selection.py first.")
     raise FileNotFoundError(f"{processed_csv} not found.")
@@ -65,7 +72,7 @@ n_layers = 2
 dev = qml.device("default.qubit", wires=n_qubits)
 
 def angle_embedding(x, wires):
-    x = npqml.array(x)
+    x = np.array(x)  # Use regular numpy instead of npqml
     # truncate or pad features
     if len(x) < len(wires):
         x = np.pad(x, (0, len(wires) - len(x)))
@@ -137,19 +144,19 @@ print(cm)
 # -------------------------------
 # 7. Save Results
 # -------------------------------
-os.makedirs("../Results", exist_ok=True)
+os.makedirs(RESULTS_DIR, exist_ok=True)
 
 # Save predictions
 pred_df = pd.DataFrame({
     "y_true": y_test,
     "y_pred": y_pred
 })
-pred_csv = "../Results/vqc_predictions.csv"
+pred_csv = os.path.join(RESULTS_DIR, "vqc_predictions.csv")
 pred_df.to_csv(pred_csv, index=False)
 logging.info(f"Predictions saved to {pred_csv}")
 
 # Save model weights
-model_path = "../Results/vqc_model.pt"
+model_path = os.path.join(RESULTS_DIR, "vqc_model.pt")
 torch.save(model.state_dict(), model_path)
 logging.info(f"Model weights saved to {model_path}")
 

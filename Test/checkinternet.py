@@ -1,38 +1,27 @@
 import requests
 
 def check_internet(url="http://www.google.com", timeout=5):
-    """Check general internet connectivity."""
+    """Check general internet connectivity. Returns True/False (no prints when imported)."""
     try:
-        response = requests.get(url, timeout=timeout)
-        print(f"Internet is reachable. Status code: {response.status_code}")
-        return True
-    except requests.ConnectionError:
-        print("No internet connection available.")
-        return False
-    except requests.Timeout:
-        print("Internet connection timed out.")
+        # use HEAD for a lighter-weight check
+        response = requests.head(url, timeout=timeout)
+        return response.status_code < 400
+    except requests.RequestException:
         return False
 
 def check_gaia_server(timeout=10):
-    """Check if Gaia TAP server is reachable."""
+    """Check if Gaia TAP server is reachable. Returns True/False."""
     gaia_url = "https://gea.esac.esa.int/tap-server/tap"
     try:
-        response = requests.get(gaia_url, timeout=timeout)
-        if response.status_code == 200:
-            print("Gaia TAP server is reachable!")
-            return True
-        else:
-            print(f"Gaia TAP server responded with status code: {response.status_code}")
-            return False
-    except requests.ConnectionError:
-        print("Cannot connect to Gaia TAP server. Check your internet/firewall.")
-        return False
-    except requests.Timeout:
-        print("Connection to Gaia TAP server timed out.")
+        response = requests.head(gaia_url, timeout=timeout)
+        return response.status_code == 200
+    except requests.RequestException:
         return False
 
 if __name__ == "__main__":
     print("Checking general internet connectivity...")
-    check_internet()
+    internet_ok = check_internet()
+    print(f"Internet reachable: {internet_ok}")
     print("\nChecking Gaia TAP server connectivity...")
-    check_gaia_server()
+    gaia_ok = check_gaia_server()
+    print(f"Gaia TAP reachable: {gaia_ok}")

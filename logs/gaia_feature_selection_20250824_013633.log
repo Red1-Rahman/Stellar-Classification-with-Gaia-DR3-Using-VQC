@@ -1,0 +1,15 @@
+2025-08-24 01:36:33,551 - INFO - Starting Gaia fetch: 20000 rows, selecting top 20 features.
+2025-08-24 01:36:33,843 - INFO - Internet connection verified
+2025-08-24 01:36:35,223 - INFO - Gaia TAP server is reachable
+2025-08-24 01:36:35,223 - INFO - Attempting simplified direct query first
+2025-08-24 01:36:42,247 - INFO - Query finished.
+2025-08-24 01:36:42,247 - INFO - Direct query successful, fetched 500 rows
+2025-08-24 01:36:42,247 - WARNING - Fetched dataframe is small or empty; falling back to synthetic data
+2025-08-24 01:36:42,247 - INFO - Generating 20000 rows of synthetic stellar data
+2025-08-24 01:36:42,292 - INFO - Using dataset with 20000 rows and 31 columns.
+2025-08-24 01:36:42,319 - INFO - Filled missing values and defined labels (nearby vs distant stars).
+2025-08-24 01:36:42,321 - INFO - Normalized features.
+2025-08-24 01:36:42,361 - INFO - Selected top 20 features.
+2025-08-24 01:36:42,371 - INFO - Train/test split done: Train (16000, 20), Test (4000, 20)
+2025-08-24 01:36:43,236 - INFO - Saved processed dataset to d:\projects\Stellar Classification with Gaia DR3 Using Variational Quantum Classifiers\Datasets\Processed\gaia_features_20.csv
+2025-08-24 01:36:43,238 - INFO - Logging to d:\projects\Stellar Classification with Gaia DR3 Using Variational Quantum Classifiers\logs\gaia_feature_selection_20250824_013633.log completed.
